@@ -36,10 +36,12 @@ public class Joueur implements Serializable {
                  NA_PAS_LA_MAIN,
                  A_LA_MAIN,
                  SOMMEIL_PROFON,
-                 PERDU
+                 PERDU,
+                 GAGNEE
                  
           }
           @Enumerated(EnumType.STRING)
+          @Column(nullable = false)
           private EtatJoueur etatjoueur;
           
            @Column(unique = true)

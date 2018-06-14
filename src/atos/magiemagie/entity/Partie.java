@@ -29,6 +29,8 @@ public class Partie implements Serializable {
     private Long id;
 
     private String nom;
+    
+    //private int nbrJrAct;
 
     public String getNom() {
         return nom;
