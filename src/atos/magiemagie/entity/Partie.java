@@ -29,6 +29,14 @@ public class Partie implements Serializable {
     private Long id;
 
     private String nom;
+
+    public List<Joueur> getJoueurs() {
+        return joueurs;
+    }
+
+    public void setJoueurs(List<Joueur> joueurs) {
+        this.joueurs = joueurs;
+    }
     
     //private int nbrJrAct;
 

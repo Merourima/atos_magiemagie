@@ -30,6 +30,10 @@ public class Joueur implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    public void getPseudo(String pseudo) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
           public enum  EtatJoueur {
@@ -40,6 +44,38 @@ public class Joueur implements Serializable {
                  GAGNEE
                  
           }
+          
+          @Column(nullable = false)
+          private Long ordre;
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Long getOrdre() {
+        return ordre;
+    }
+
+    public void setOrdre(Long ordre) {
+        this.ordre = ordre;
+    }
+
+    public Partie getPartie() {
+        return partie;
+    }
+
+    public void setPartie(Partie partie) {
+        this.partie = partie;
+    }
+
+    public List<Carte> getCartes() {
+        return cartes;
+    }
+
+    public void setCartes(List<Carte> cartes) {
+        this.cartes = cartes;
+    }
+          
           @Enumerated(EnumType.STRING)
           @Column(nullable = false)
           private EtatJoueur etatjoueur;

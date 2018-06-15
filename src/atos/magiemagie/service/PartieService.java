@@ -16,8 +16,24 @@ import java.util.List;
 public class PartieService {
     
      private PartieDAO dao = new PartieDAO();
+     
      public List<Partie> listerPartieNonDemarrees(){
      
      return dao.listerPartieNonDemarrees();
      }
-}
+     
+     //*****Partie******
+     public Partie creerNouvellePartie(String nom){
+         Partie p = new Partie();
+         p.setNom(nom);
+         dao.ajouterPartie(p);
+         
+         return p;
+     }
+}    
+     
+
+     
+    
+     
+     

@@ -18,6 +18,18 @@ import javax.persistence.Query;
  */
 public class PartieDAO {
     
+    
+     public void ajouterPartie(Partie p){
+     
+            EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
+            em.getTransaction().begin();
+             
+            em.persist(p);
+            
+            em.getTransaction().commit();
+            
+     }
+    
      public List<Partie> listerPartieNonDemarrees(){
      
          EntityManager em =  Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
@@ -35,12 +47,20 @@ public class PartieDAO {
                  + "                         exept"
                  + "                           select p1"
                  + "                           from Partie p1"
-                 + "                      join p.joueurs j"
+                 + "                         join p.joueurs j"
                  + "                           where j.etatjoueurs in (:etat_gagne, : etat_alamain) ");
          query.setParameter("etat_gagne", Joueur.EtatJoueur.GAGNEE);
          query.setParameter("etat_alamain", Joueur.EtatJoueur.A_LA_MAIN);
                  
          return query.getResultList();
      }
+
+    public Partie rechercherParID(long idPartie) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
+        
+        // find: pour la recherche par clé primaire
+        return em.find(Partie.class, idPartie);
+    }
     
 }
