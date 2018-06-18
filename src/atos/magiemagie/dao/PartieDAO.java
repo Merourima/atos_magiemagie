@@ -30,6 +30,11 @@ public class PartieDAO {
             
      }
     
+     /**
+      * Liste des parties DONT AUCUN JOUEUR n'est à l'état A LA MAIN ou GAGNEE
+      * @return 
+      */
+     
      public List<Partie> listerPartieNonDemarrees(){
      
          EntityManager em =  Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();

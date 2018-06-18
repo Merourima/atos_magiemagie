@@ -20,7 +20,7 @@ public class JoueurService {
     private JoueurDAO dao = new JoueurDAO();
     private PartieDAO partiedao = new PartieDAO();
     
-    public void rejoindrePartie( String pseudo,long idPartie,String avatar){
+    public Joueur rejoindrePartie( String pseudo,long idPartie,String avatar){
     
       //recherche si le joueur existe déjà
       Joueur joueur = dao.rechercherParPseudo(pseudo);
@@ -50,6 +50,6 @@ public class JoueurService {
       else{
            dao.modifier(joueur);
       }
-      
+      return joueur;
     }
 }

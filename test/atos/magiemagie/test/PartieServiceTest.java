@@ -17,17 +17,21 @@ import static org.junit.Assert.*;
 public class PartieServiceTest {
     
     
-    private PartieService service = new PartieService();
+    private PartieService partieservice = new PartieService();
     
-    @Test
+  //  @Test
     public void creerNouvellePartieTestOK() {
         //Partie p = service.CréerNouvellePartie("hello");
         //Partie p = service.creerNouvellePartie("hello");
-        Partie p = service.creerNouvellePartie("hello");
+        Partie p = partieservice.creerNouvellePartie("hello");
         assertNotNull(p.getId());
         
     }
               
-   
+   @Test
+    public void demarrerPartieTestOK() {
+       Partie par = new Partie();
+       partieservice.demarrerPartie(par.getId());
+    }
     
 }
