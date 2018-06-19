@@ -5,6 +5,7 @@
  */
 package atos.magiemagie.service;
 
+import atos.magiemagie.dao.CarteDAO;
 import atos.magiemagie.dao.JoueurDAO;
 import atos.magiemagie.dao.PartieDAO;
 import atos.magiemagie.entity.Carte;
@@ -23,6 +24,8 @@ public class PartieService {
     private PartieDAO dao = new PartieDAO();
     private JoueurService dao1 = new JoueurService();
     private JoueurDAO daoJr = new JoueurDAO();
+    private CarteDAO daoCarte = new CarteDAO();
+    private CarteService carteservice = new CarteService();
 
     public List<Partie> listerPartieNonDemarrees() {
 
@@ -39,10 +42,12 @@ public class PartieService {
     }
 
     //******Démarrer Partie
+    //******Démarrer Partie
     public void demarrerPartie(long idPartie) {
 
         // Recuperer la partie par id
         Partie p = dao.rechercherParID(idPartie);
+       // Carte c = daoCarte.
 
         //Erreur  si pas au moins 2 joueurs dans la partie
         if (p.getJoueurs().size() < 2) {
@@ -51,40 +56,44 @@ public class PartieService {
         }
 
         //Passe le joueur d'ordre 1 à l'état A_LA_MAIN
-        for (Joueur j : p.getJoueurs()) {
-            Joueur ord = daoJr.rechercheLeJoueurOrdre1(idPartie);
-            if (ord.equals(1)) {
-                j.setEtatjoueur(Joueur.EtatJoueur.A_LA_MAIN);
-            }
-        }
+        Joueur ord = daoJr.rechercheLeJoueurOrdre1(idPartie);
+        ord.setEtatjoueur(Joueur.EtatJoueur.A_LA_MAIN);
+        daoJr.modifier(ord);
 
         //distribuer 7 cartes au hasard pour chaque joueur de la partie
         for (Joueur j : p.getJoueurs()) {
-
             for (int i = 0; i < 7; i++) {
-
-                  distribuerCarte( j.getId() );
+                //System.out.println("hhhhh"+i);
+                carteservice.distribuerCarte(j.getId());
+                
             }
         }
+//        daoCarte.modifierCarteBDD();
     }
+    
+    
     // cartes au hasard
-
-    public Carte distribuerCarte(long joueurId) {
-
-        // 1. Générer nouvelle carte
-        TypeIngredient[] tabCarteIng = TypeIngredient.values();
-        Random r = new Random();
-        int n = r.nextInt(tabCarteIng.length);
-        Carte c = new Carte();
-        c.setTypeIngredient(tabCarteIng[n]);
-        
-        // 2. Associe la carte au joueur et vice-versa
-        daoJr.
-        
-        // 3. Persiste la carte
-        
-        
-        return c;
-    }
-
+//    public Carte distribuerCarte(long idJoueur) {
+//
+//        //0. Récup joueur
+//        Joueur j = daoJr.rechercheParId(idJoueur);
+//        
+//        // 1. Générer nouvelle carte
+//        TypeIngredient[] tabCarteIng = TypeIngredient.values();
+//        Random r = new Random();
+//        int n = r.nextInt(tabCarteIng.length);
+//        Carte c = new Carte();
+//        c.setTypeIngredient(tabCarteIng[n]);
+//
+//        // 2. Associe la carte au joueur et vice-versa
+//        List<Carte> list = j.getCartes();
+//        list.add(c);
+//        j.setCartes(list);                       //         j.getCartes().add(c);
+//
+//
+//        // 3. Persiste la carte
+//        daoJr.modifier(j);
+//        daoCarte.modifierCarteBDD(c);
+//        return c;
+//    }
 }

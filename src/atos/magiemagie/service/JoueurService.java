@@ -30,7 +30,6 @@ public class JoueurService {
           joueur.setPseudo(pseudo);
       }
       
-      
       joueur.setAvatar(avatar);
       joueur.setEtatjoueur(Joueur.EtatJoueur.NA_PAS_LA_MAIN);
       joueur.setOrdre(dao.rechercheOrdreNouveauJoueurPourPartieID(idPartie));

@@ -28,7 +28,7 @@ public class JoueurDAO {
         EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
 
         Query query = em.createQuery("select Max(j.ordre)+1 from Joueur j "
-                + "                                        join j.partie p where j.id =:idPartie ");
+                + "                                        join j.partie p where p.id =:idPartie ");
 
         query.setParameter("idPartie", partieId);
         Object res = query.getSingleResult();
@@ -41,9 +41,7 @@ public class JoueurDAO {
     public Joueur rechercheLeJoueurOrdre1(long idPartie) {
         EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
 
-        Query query = em.createQuery("select j from Joueur j"
-                + "                                       join j.partie p where  "
-                + "                            where j.ordre == 1 ");
+        Query query = em.createQuery("select j from Joueur j join j.partie p where j.ordre = 1 ");
         Object res = query.getSingleResult();
         return (Joueur) res;
     }
@@ -78,7 +76,16 @@ public class JoueurDAO {
 
     public void modifier(Joueur joueur) {
          EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
-         em.merge(em);
+         em.getTransaction().begin();
+         em.merge(joueur);
+         em.flush();
+         em.getTransaction().commit();     
     }
 
+    public Joueur rechercheParId(long idJoueur) {
+        
+         EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
+         
+         return em.find(Joueur.class,idJoueur);
+    }
 }

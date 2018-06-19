@@ -68,6 +68,16 @@ public class Carte implements Serializable {
         this.id = id;
     }
 
+    public Joueur getJoueur() {
+        return joueur;
+    }
+
+    public void setJoueur(Joueur joueur) {
+        this.joueur = joueur;
+    }
+
+    
+    
     @Override
     public int hashCode() {
         int hash = 0;
