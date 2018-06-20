@@ -5,6 +5,7 @@
  */
 package atos.magiemagie.main;
 
+import atos.magiemagie.entity.Joueur;
 import atos.magiemagie.entity.Partie;
 import atos.magiemagie.service.JoueurService;
 import atos.magiemagie.service.PartieService;
@@ -20,8 +21,8 @@ public class PointEntree {
     /**
      * @param args the command line arguments
      */
-    private PartieService partie = new PartieService();
-    private JoueurService joueur = new JoueurService();
+    private PartieService partieService = new PartieService();
+    private JoueurService joueurService = new JoueurService();
     
     public void menuPrincipale(){
         
@@ -35,6 +36,7 @@ public class PointEntree {
         System.out.println(" 2. Créer une Partie ");
         System.out.println(" 3. Rejoindre une Partie ");
         System.out.println(" 4. Démarrer une Partie ");
+        System.out.println(" 5. Lister les Parties démarrées ");
         System.out.println(" Q. Quitter ");
         System.out.print(" votre choix :  ");
         
@@ -43,33 +45,58 @@ public class PointEntree {
           switch(choix){
             case "1":
                 
-                  List<Partie> listePartie = partie.listerPartieNonDemarrees();
+                  List<Partie> listePartie = partieService.listerPartieNonDemarrees();
                   System.out.println(" La liste des Parties non démarrées  " +listePartie);
+                  for (Partie partie : listePartie) {
+                      for (Joueur joueur : partie.getJoueurs()) {
+                        System.out.println("Joueur info : " +joueur.getPseudo());   
+                      }
+                   
+                }
                   
                 break;
                 
             case "2":
                  System.out.println(" Entrez le non de la patie "); 
                  String nomPartie = scan.nextLine();
-                 partie.creerNouvellePartie(nomPartie);
+                 partieService.creerNouvellePartie(nomPartie);
                 break;
                 
-            case "3":
-                System.out.println(" Entrez un Pseudo et un Avatar  *____* ");
-                String pseudo = scan.nextLine();
-                String avatar = scan.nextLine();
-                joueur.rejoindrePartie(pseudo, 1, avatar); /// check it!!!!!!!!
-                break;
-            case "4":
-                break;
-            case "Q":
-                break;
-                
-            default:
-                System.out.println(" ");
-                System.out.println(" !!!!!!!! Choix inconnu !!!!!!");
-        }
-        }while(! choix.equals("Q"));
+                case "3":
+                    System.out.println(" Entrez un Pseudo et un Avatar et le ID partie   *____* ");
+                    String pseudo = scan.nextLine();
+                    String avatar = scan.nextLine();
+                    Long idPartie = Long.parseLong(scan.nextLine());
+                    joueurService.rejoindrePartie(pseudo, idPartie, avatar); /// check it!!!!!!!!
+                    break;
+                case "4":
+                    idPartie = Long.parseLong(scan.nextLine());
+                    partieService.demarrerPartie(idPartie);
+
+                    break;
+
+                case "5":
+
+                    List<Partie> listePartieDemarrer = partieService.listerPartieDemarrees();
+                    System.out.println(" La liste des Parties non démarrées  " + listePartieDemarrer);
+                    for (Partie partie : listePartieDemarrer) {
+                        for (Joueur joueur : partie.getJoueurs()) {
+                            System.out.println("Joueur info : " + joueur.getPseudo());
+                        }
+
+                    }
+
+                    break;
+                case "Q":
+                    System.out.println(" A La Prochaine fois *____* ");
+                    System.out.println("                                     ");
+                    break;
+
+                default:
+                    System.out.println(" ");
+                    System.out.println(" !!!!!!!! Choix inconnu !!!!!!");
+            }
+        } while (!choix.equals("Q"));
     }
     
     public static void main (String[] args) {

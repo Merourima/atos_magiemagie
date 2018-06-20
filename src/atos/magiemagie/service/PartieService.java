@@ -128,5 +128,10 @@ public class PartieService {
             }
         }
     }
+
+    public List<Partie> listerPartieDemarrees() {
+        return partiedao.listerPartieDemarrees();
+        
+    }
  
 }

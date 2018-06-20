@@ -89,5 +89,18 @@ public class PartieDAO {
         // find: pour la recherche par clé primaire
         return em.find(Partie.class, idPartie);
     }
+
+    public List<Partie> listerPartieDemarrees() {
+         EntityManager em =  Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
+
+         Query query = em.createQuery(" SELECT p1 FROM Partie p1 JOIN p1.joueurs j"
+                 + "                   WHERE j.etatjoueur=:etat_gagne OR j.etatjoueur=:etat_alamain");  //IN (:etat_gagne,:etat_alamain)");
+         query.setParameter("etat_gagne", Joueur.EtatJoueur.GAGNEE);
+         query.setParameter("etat_alamain", Joueur.EtatJoueur.A_LA_MAIN);
+                 
+         return query.getResultList();
+
+     
+    }
     
 }

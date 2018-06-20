@@ -93,7 +93,7 @@ public class Partie implements Serializable {
 
     @Override
     public String toString() {
-        return "atos.magiemagie.entity.Partie[ id=" + id + " ]";
+        return "atos.magiemagie.entity.Partie[ id=" + id + " ]"  ;
     }
     
 }
