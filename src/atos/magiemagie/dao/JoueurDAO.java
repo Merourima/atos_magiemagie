@@ -17,12 +17,18 @@ import javax.persistence.Query;
  */
 public class JoueurDAO {
 
-    /**
-     * Renvoi le joueur existe par pseudo
-     *
-     * @param pseudo
-     * @return
-     */
+    
+    public Joueur determineJoueurQuiALaMainDansPArtie(long idPartie){
+             EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
+              Query query = em.createQuery("select j from Joueur join j.partie p where j.etatjoueur=:etat_ALaMain and p.id=:id_Partie");
+              query.setParameter("etat_ALaMain", Joueur.EtatJoueur.A_LA_MAIN);
+              query.setParameter("id_Partie", idPartie);
+              
+              return (Joueur) query.getSingleResult();
+    }
+    
+    
+    
     public long rechercheOrdreNouveauJoueurPourPartieID(long partieId) {
 
         EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
@@ -45,9 +51,13 @@ public class JoueurDAO {
         Object res = query.getSingleResult();
         return (Joueur) res;
     }
-
+    /**
+     * Renvoi le joueur existe par pseudo
+     *
+     * @param pseudo
+     * @return
+     */
     public Joueur rechercherParPseudo(String pseudo) {
-
         EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
 
         Query query = em.createQuery("select j from Joueur j where j.pseudo =:lePseudo");
@@ -58,18 +68,13 @@ public class JoueurDAO {
         if (joueurTrouves.size() == 0) {
             return null;
         }
-
         return (joueurTrouves.get(0));
-
     }
 
     public void ajouter(Joueur joueur) {
-
         EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
         em.getTransaction().begin();
-
         em.persist(joueur);
-
         em.getTransaction().commit();
 
     }
@@ -83,9 +88,17 @@ public class JoueurDAO {
     }
 
     public Joueur rechercheParId(long idJoueur) {
-        
          EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
-         
          return em.find(Joueur.class,idJoueur);
+    }
+
+    public Joueur rechercheJoueurParPartieidEtORdre(long idParatie, long ordre) {
+           EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
+           Query query = em.createQuery("select j from Joueur j join j.partie p where p.id=:partieID and j.ordre=:ordre");
+           query.setParameter("partieID", idParatie);
+           query.setParameter("ordre", ordre);
+           return (Joueur) query.getSingleResult();
+
+
     }
 }

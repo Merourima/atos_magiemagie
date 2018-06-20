@@ -19,15 +19,38 @@ import javax.persistence.Query;
 public class PartieDAO {
     
     
-     public void ajouterPartie(Partie p){
+    
+    public boolean determineSiPlusQueUnJoueurDansPartie(long partieID){
+        EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
+        Query query = em.createQuery(" select j from Joueur j join j.partie p where p.id=:idPartie "
+                + "                    except"
+                + "                    select j from Joueur j join j.partie p where p.id=:idPartie and j.etatjoueur=etatPerdu");
+        query.setParameter("idPartie", partieID);
+        query.setParameter("etatPerdu", Joueur.EtatJoueur.PERDU);
+        
+       List res = query.getResultList();
+       
+       if(res.size() == 1){
+           return true;
+       }
+       else
+           return false;
+    }
+    
+    public long  rechercheOrdreMaxJoueurPourPartieID(long partieID){
+             EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
+             Query query = em.createQuery("SELECT Max(j.ordre) FROM Joueur j join j.partie p"
+                     + "                   WHERE p.id=:id");
+             query.setParameter("id", partieID);
+             return (long) query.getSingleResult();
+    }
+    
+    public void ajouterPartie(Partie p){
      
             EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
             em.getTransaction().begin();
-             
             em.persist(p);
-            
             em.getTransaction().commit();
-            
      }
     
      /**
@@ -46,18 +69,17 @@ public class PartieDAO {
 //                 + "                   join p2.joueurs j"
 //                 + "                   where j.etatjoueur =: etatjoueur1"
 //                 + "                         or j.etatjoueur =: etatjoueur2 ");
+                //Query query = em.createQuery("SELECT p FROM Partie p ");
 
-         Query query = em.createQuery("select p "
-                 + "                         from Partie p "
-                 + "                         exept"
-                 + "                           select p1"
-                 + "                           from Partie p1"
-                 + "                         join p.joueurs j"
-                 + "                           where j.etatjoueurs in (:etat_gagne, : etat_alamain) ");
+         Query query = em.createQuery("SELECT p FROM Partie p "
+                 + "                   EXCEPT "
+                 + "                   SELECT p1 FROM Partie p1 JOIN p1.joueurs j"
+                 + "                   WHERE j.etatjoueur=:etat_gagne OR j.etatjoueur=:etat_alamain");  //IN (:etat_gagne,:etat_alamain)");
          query.setParameter("etat_gagne", Joueur.EtatJoueur.GAGNEE);
          query.setParameter("etat_alamain", Joueur.EtatJoueur.A_LA_MAIN);
                  
          return query.getResultList();
+//return query.getResultList();
      }
 
     public Partie rechercherParID(long idPartie) {

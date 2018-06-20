@@ -17,22 +17,22 @@ import java.util.List;
  */
 public class JoueurService {
     
-    private JoueurDAO dao = new JoueurDAO();
+    private JoueurDAO joueurDao = new JoueurDAO();
     private PartieDAO partiedao = new PartieDAO();
     
     public Joueur rejoindrePartie( String pseudo,long idPartie,String avatar){
     
       //recherche si le joueur existe déjà
-      Joueur joueur = dao.rechercherParPseudo(pseudo);
+      Joueur joueur = joueurDao.rechercherParPseudo(pseudo);
       if (joueur == null){
-           // le joueur n'existe pas encore
+      // le joueur n'existe pas encore
           joueur = new Joueur();
           joueur.setPseudo(pseudo);
       }
       
       joueur.setAvatar(avatar);
       joueur.setEtatjoueur(Joueur.EtatJoueur.NA_PAS_LA_MAIN);
-      joueur.setOrdre(dao.rechercheOrdreNouveauJoueurPourPartieID(idPartie));
+      joueur.setOrdre(joueurDao.rechercheOrdreNouveauJoueurPourPartieID(idPartie));
       
       //Assicie le joueur a la partie et vice_versa (JPA relations bidirec...)
       Partie partie = partiedao.rechercherParID(idPartie);
@@ -44,11 +44,14 @@ public class JoueurService {
       
       if(joueur.getId() == null){
       
-         dao.ajouter(joueur);
+         joueurDao.ajouter(joueur);
       }
       else{
-           dao.modifier(joueur);
+           joueurDao.modifier(joueur);
       }
       return joueur;
     }
+    
+    
+    
 }

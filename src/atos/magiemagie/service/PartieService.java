@@ -21,22 +21,81 @@ import java.util.Random;
  */
 public class PartieService {
 
-    private PartieDAO dao = new PartieDAO();
+    private PartieDAO partiedao = new PartieDAO();
     private JoueurService dao1 = new JoueurService();
-    private JoueurDAO daoJr = new JoueurDAO();
+    private JoueurDAO joueurDao = new JoueurDAO();
     private CarteDAO daoCarte = new CarteDAO();
     private CarteService carteservice = new CarteService();
+    
+    
+    // *****************          Déterminer Le Joueur Suivant      ***********************
+    
+    public void passeJoueurSuivant(long idpartie, long idPartie){
+    
+//        recuperer un joueur qui A_LA_MAIN
+        Joueur joueurQuiAlaMain = joueurDao.determineJoueurQuiALaMainDansPArtie(idpartie);
+            
+//        determine si les autres joueurs ont perdu
+//          et Passe le joueur à l'état GAGNé
+        if(partiedao.determineSiPlusQueUnJoueurDansPartie(idpartie)){
+                 joueurQuiAlaMain.setEtatjoueur(Joueur.EtatJoueur.GAGNEE);
+                 joueurDao.modifier(joueurQuiAlaMain);
+                 return;
+        }
+//        La partie n'est pas terminée
+//        recupere l'ordre Max des joueurs de la partie
+        long ordreMax = partiedao.rechercheOrdreMaxJoueurPourPartieID(idpartie);
+        
+//        joueurEvalue = joueurQuiALaMain
+        Joueur joueurEvalue = joueurQuiAlaMain;
+         //boucle qui determine le joueur qui 'attrape' A LA MAIN
+         while(true){
+             //si joueurEvalue est le dernier joueur alors on évalue le joueur d'ordre 1
+             if(joueurEvalue.getOrdre() >= ordreMax){
+                 joueurEvalue = joueurDao.rechercheJoueurParPartieidEtORdre(idPartie, 1L);
+             }  else {   //             recupere le joueur d'ordre suivant  (ordre+1)
+                     joueurEvalue = joueurDao.rechercheJoueurParPartieidEtORdre(idPartie, joueurEvalue.getOrdre()+1);
+                }
+             
+             //Return si tout les joueurs non éliminés était en sommeil profond (et qu'on la a juste réveillés)
+             if(joueurEvalue.getId() == joueurQuiAlaMain.getId()){
+                return;
+             }
+             
+             // si joueur évaluer en sommeil profond en passe à PAS_LA_MAIN
+              if (joueurEvalue.getEtatjoueur()== Joueur.EtatJoueur.SOMMEIL_PROFON){
+                  joueurEvalue.setEtatjoueur(Joueur.EtatJoueur.NA_PAS_LA_MAIN);
+                  joueurDao.modifier(joueurEvalue);
+              } else{
+              //si n'est pas en sommeil profond
+              
+              //si joueurEvalue pas la main alors c'est lui qui prend la main
+               if (joueurEvalue.getEtatjoueur() == Joueur.EtatJoueur.NA_PAS_LA_MAIN){
+                   joueurQuiAlaMain.setEtatjoueur(Joueur.EtatJoueur.NA_PAS_LA_MAIN);
+                   joueurDao.modifier(joueurQuiAlaMain);
+                   
+                   joueurEvalue.setEtatjoueur(Joueur.EtatJoueur.A_LA_MAIN);
+                   joueurDao.modifier(joueurEvalue);
+                   return;
+               } 
+               // sinon : ETAT JOUEUR EVALUER  ==>  passe à PAS LA MAIN
+               joueurEvalue.setEtatjoueur(Joueur.EtatJoueur.NA_PAS_LA_MAIN);
+               
+              }
+         }
+            
+    }
 
     public List<Partie> listerPartieNonDemarrees() {
 
-        return dao.listerPartieNonDemarrees();
+        return partiedao.listerPartieNonDemarrees();
     }
 
     //*****Partie******
     public Partie creerNouvellePartie(String nom) {
         Partie p = new Partie();
         p.setNom(nom);
-        dao.ajouterPartie(p);
+        partiedao.ajouterPartie(p);
 
         return p;
     }
@@ -46,7 +105,7 @@ public class PartieService {
     public void demarrerPartie(long idPartie) {
 
         // Recuperer la partie par id
-        Partie p = dao.rechercherParID(idPartie);
+        Partie p = partiedao.rechercherParID(idPartie);
        // Carte c = daoCarte.
 
         //Erreur  si pas au moins 2 joueurs dans la partie
@@ -56,44 +115,18 @@ public class PartieService {
         }
 
         //Passe le joueur d'ordre 1 à l'état A_LA_MAIN
-        Joueur ord = daoJr.rechercheLeJoueurOrdre1(idPartie);
+        Joueur ord = joueurDao.rechercheLeJoueurOrdre1(idPartie);
         ord.setEtatjoueur(Joueur.EtatJoueur.A_LA_MAIN);
-        daoJr.modifier(ord);
+        joueurDao.modifier(ord);
 
         //distribuer 7 cartes au hasard pour chaque joueur de la partie
         for (Joueur j : p.getJoueurs()) {
             for (int i = 0; i < 7; i++) {
-                //System.out.println("hhhhh"+i);
+              
                 carteservice.distribuerCarte(j.getId());
                 
             }
         }
-//        daoCarte.modifierCarteBDD();
     }
-    
-    
-    // cartes au hasard
-//    public Carte distribuerCarte(long idJoueur) {
-//
-//        //0. Récup joueur
-//        Joueur j = daoJr.rechercheParId(idJoueur);
-//        
-//        // 1. Générer nouvelle carte
-//        TypeIngredient[] tabCarteIng = TypeIngredient.values();
-//        Random r = new Random();
-//        int n = r.nextInt(tabCarteIng.length);
-//        Carte c = new Carte();
-//        c.setTypeIngredient(tabCarteIng[n]);
-//
-//        // 2. Associe la carte au joueur et vice-versa
-//        List<Carte> list = j.getCartes();
-//        list.add(c);
-//        j.setCartes(list);                       //         j.getCartes().add(c);
-//
-//
-//        // 3. Persiste la carte
-//        daoJr.modifier(j);
-//        daoCarte.modifierCarteBDD(c);
-//        return c;
-//    }
+ 
 }
