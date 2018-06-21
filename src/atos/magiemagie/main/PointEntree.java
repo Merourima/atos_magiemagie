@@ -94,9 +94,9 @@ public class PointEntree {
                     for (Partie partie : listePartie) {
                       
                       for (Joueur joueur : partie.getJoueurs()) {
-                        //  if(idPartie = joueur.getPartie() ) {
+                          if(idPartie = joueur.getPartie() ) {
                         System.out.println("Joueur ID : " +joueur.getId());   
-                      //}
+                     }
                       }
                 }
                     //System.out.println(" ayouhhhh" +partieDao.rechercherParID(idPartie).getId());
