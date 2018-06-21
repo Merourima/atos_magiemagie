@@ -5,8 +5,10 @@
  */
 package atos.magiemagie.service;
 
+import atos.magiemagie.dao.CarteDAO;
 import atos.magiemagie.dao.JoueurDAO;
 import atos.magiemagie.dao.PartieDAO;
+import atos.magiemagie.entity.Carte;
 import atos.magiemagie.entity.Joueur;
 import atos.magiemagie.entity.Partie;
 import java.util.List;
@@ -19,7 +21,18 @@ public class JoueurService {
     
     private JoueurDAO joueurDao = new JoueurDAO();
     private PartieDAO partiedao = new PartieDAO();
+    private CarteDAO caretdao = new CarteDAO();
     
+//    public Carte recupereCartesJoueurs(long idjoueur){
+//        Carte cartejrs = caretdao.listerCartesJoueurs(idjoueur);
+//        List<Carte> listecarte =    
+//        for (Carte carte: listecarte) {
+//            
+//        }
+//        return cartejrs;
+//    
+//    }
+//    
     public Joueur rejoindrePartie( String pseudo,long idPartie,String avatar){
     
       //recherche si le joueur existe déjà

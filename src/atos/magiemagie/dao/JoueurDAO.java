@@ -47,9 +47,9 @@ public class JoueurDAO {
     public Joueur rechercheLeJoueurOrdre1(long idPartie) {
         EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
 
-        Query query = em.createQuery("select j from Joueur j join j.partie p where j.ordre = 1 ");
-        Object res = query.getSingleResult();
-        return (Joueur) res;
+        Query query = em.createQuery("select j from Joueur j join j.partie p where j.ordre = 1 and p.id =:idpartie ");
+        query.setParameter("idpartie", idPartie);
+        return  (Joueur) query.getSingleResult();
     }
     /**
      * Renvoi le joueur existe par pseudo
@@ -101,4 +101,13 @@ public class JoueurDAO {
 
 
     }
+    
+    
+//    public Joueur ListerJoueursEtLeurNbrDeCartes(long idjoueur, long nbrCarte){
+//           EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
+//           Query query = em.createQuery(" SELECT j FROM Joueur j JOIN j.cartes c"
+//                   + "                    WHERE c.joueur_id=:j.id AND  ");
+//   
+//    
+//    }
 }

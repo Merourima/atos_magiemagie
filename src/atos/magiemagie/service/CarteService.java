@@ -45,7 +45,7 @@ public class CarteService {
         // 3. Persiste la carte
        // daoJr.modifier(j);
         daoCarte.ajouterCarte(c);
-        return c;
+        return (Carte) c;
     }
     
 }

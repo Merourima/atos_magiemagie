@@ -24,7 +24,7 @@ public class PartieDAO {
         EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
         Query query = em.createQuery(" select j from Joueur j join j.partie p where p.id=:idPartie "
                 + "                    except"
-                + "                    select j from Joueur j join j.partie p where p.id=:idPartie and j.etatjoueur=etatPerdu");
+                + "                    select j from Joueur j join j.partie p where p.id=:idPartie and j.etatjoueur=:etatPerdu");
         query.setParameter("idPartie", partieID);
         query.setParameter("etatPerdu", Joueur.EtatJoueur.PERDU);
         
