@@ -42,5 +42,10 @@ public class CarteDAO {
             return   query.getResultList();
     }
 
+    public Carte rechercheParIDCarte(long idCarte1) {
+                EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
+                return em.find(Carte.class, idCarte1);
+    }
+
     
 }

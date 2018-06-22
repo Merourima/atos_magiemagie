@@ -28,6 +28,34 @@ public class PartieService {
     private CarteService carteservice = new CarteService();
     
     
+     // *****************          Lancer un sort      ***********************
+    
+    public void lancerSort(long idCarte1, long idCarte2, long idJrAct, long idVictime){
+    
+        Carte carte1 = daoCarte.rechercheParIDCarte(idCarte1);
+        Carte carte2 = daoCarte.rechercheParIDCarte(idCarte2);
+            
+        if (carte1.getTypeIngredient() == TypeIngredient.LICORNE && carte2.getTypeIngredient() == TypeIngredient.CRAPAUD) {
+            System.out.println(" le sort est INVISIBILITE et tu peux ...........");
+        } else {
+            if (carte1.getTypeIngredient() == TypeIngredient.LICORNE && carte2.getTypeIngredient() == TypeIngredient.MANDRAGORE) {
+                System.out.println(" le sort est PHILTRE D’AMOUR");
+            } else {
+                if (carte1.getTypeIngredient() == TypeIngredient.CRAPAUD && carte2.getTypeIngredient() == TypeIngredient.LAPIS_LAZULI) {
+                    System.out.println(" le sort est HYPNOSE");
+                } else {
+                    if (carte1.getTypeIngredient() == TypeIngredient.CHAUVE_SOURIS && carte2.getTypeIngredient() == TypeIngredient.LAPIS_LAZULI) {
+                        System.out.println(" le sort est DIVINATION");
+                    } else {
+                        if (carte1.getTypeIngredient() == TypeIngredient.CHAUVE_SOURIS && carte2.getTypeIngredient() == TypeIngredient.MANDRAGORE) {
+                            System.out.println(" le sort est SOMMEIL-PROFOND");
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     // *****************          Déterminer Le Joueur Suivant      ***********************
     
     public void passeJoueurSuivant(long idpartie, long idPartie){

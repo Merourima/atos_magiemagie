@@ -33,12 +33,10 @@ public class PointEntree {
     private CarteService carteservice = new CarteService();
     private CarteDAO carteDaoJr = new CarteDAO();
     
+    public void lancerLeJeu(){
+            
     
-//    public Carte listerCartesDuJoueur(long idjoueur){
-//           List<Carte> listeCarteJr = (List<Carte>) carteservice.distribuerCarte(idjoueur);
-//           return (Carte) listeCarteJr;
-//    }
-    
+    }
     public void menuPrincipale(){
         
         Scanner scan = new Scanner(System.in);
@@ -84,6 +82,7 @@ public class PointEntree {
                     Long idPartie = Long.parseLong(scan.nextLine());
                     joueurService.rejoindrePartie(pseudo, idPartie, avatar); /// check it!!!!!!!!
                     System.out.println(" Vous jouez dans la partie : " +partieDao.rechercherParID(idPartie).getNom());
+                    //recup idJoueurActuell enregistrer;
                     break;
                     
                 case "4":
@@ -91,7 +90,6 @@ public class PointEntree {
                     System.out.println(" Entrez le ID de La partie   *____* ");
                     idPartie = Long.parseLong(scan.nextLine());
                     partieService.demarrerPartie(idPartie);// chek it
-                    
                     // Recherche partie par son id
                     Partie p = partieDao.rechercherParID(idPartie);
                     List<Joueur> joueurID =  p.getJoueurs();
@@ -102,20 +100,17 @@ public class PointEntree {
                        System.out.println("" +carteDaoJr.listerCartesJoueurs(joueur.getId()));
                    }
                    System.out.println(" La partie : " +idPartie+ " est bien démarrée");
-                   
                    //Récupere  id joueur qui a la main
                    System.out.println(" Le Joueur qui A LA MAIN est  : " +joueurDao.determineJoueurQuiALaMainDansPArtie(idPartie));
                     break;
 
                 case "5":
-
                     List<Partie> listePartieDemarrer = partieService.listerPartieDemarrees();
                     System.out.println(" La liste des Parties non démarrées  " + listePartieDemarrer);
                     for (Partie partie : listePartieDemarrer) {
                         for (Joueur joueur : partie.getJoueurs()) {
                             System.out.println("Joueur info : " + joueur.getPseudo());
                         }
-
                     }
 
                     break;     
@@ -130,7 +125,25 @@ public class PointEntree {
             }
         } while (!choix.equals("Q"));
     }
+    private void ecranJeu(long idPartie, String pseudo){
+        //recup id de moi
+        
+        long monID = 1L;
+        while(true){
+        //recherhce jr qui a la main
+        //si == monID ===> a moi jouer
+        
+        //sysout: lanser un sort ou  passer son tour : piocher une carte
+        //case 
+//        .
+//        .. 
+//        . 
+//        
+//default: 
+//systout"option inconnue";
+        }
     
+    }
     public static void main(String[] args) {
         PointEntree m = new PointEntree();
         m.menuPrincipale();
