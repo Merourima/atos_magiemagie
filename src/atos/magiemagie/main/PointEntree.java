@@ -87,28 +87,24 @@ public class PointEntree {
                     break;
                     
                 case "4":
+                    // Scan id partie et la démarre
                     System.out.println(" Entrez le ID de La partie   *____* ");
                     idPartie = Long.parseLong(scan.nextLine());
-                    partieService.demarrerPartie(idPartie);
-                    listePartie = partieService.listerPartieDemarrees();
-                    for (Partie partie : listePartie) {
-                      
-                      for (Joueur joueur : partie.getJoueurs()) {
-                          if(idPartie = joueur.getPartie() ) {
-                        System.out.println("Joueur ID : " +joueur.getId());   
-                     }
-                      }
-                }
-                    //System.out.println(" ayouhhhh" +partieDao.rechercherParID(idPartie).getId());
+                    partieService.demarrerPartie(idPartie);// chek it
                     
-                    
-                   /* List<Carte> listeCarteJr = (List<Carte>) carteservice.distribuerCarte(idPartie);
-                    for (Carte carte: listeCarteJr) {
-                        System.out.print(" Vos cartes :  " +carte.getTYpe +" - ");
-                    }*/
-                    
-                    System.out.println(" La partie : " +idPartie+ " est bien démarrer");
-
+                    // Recherche partie par son id
+                    Partie p = partieDao.rechercherParID(idPartie);
+                    List<Joueur> joueurID =  p.getJoueurs();
+                    System.out.println("Joueurs: " + joueurID);
+                   // il faut modifier le code pour afficher seulement les cartes du joueur lui mm et pas des autres
+                   for (Joueur joueur : p.getJoueurs()) {
+                       System.out.print(" Les cartes de " + joueur.getPseudo()+ " sont : ");
+                       System.out.println("" +carteDaoJr.listerCartesJoueurs(joueur.getId()));
+                   }
+                   System.out.println(" La partie : " +idPartie+ " est bien démarrée");
+                   
+                   //Récupere  id joueur qui a la main
+                   System.out.println(" Le Joueur qui A LA MAIN est  : " +joueurDao.determineJoueurQuiALaMainDansPArtie(idPartie));
                     break;
 
                 case "5":

@@ -100,7 +100,8 @@ public class Carte implements Serializable {
 
     @Override
     public String toString() {
-        return "atos.magiemagie.entity.Carte[ id=" + id + " ]";
+//        return "atos.magiemagie.entity.Carte[ id=" + id + " ]";
+            return String.format("%s", typeIngredient);
     }
     
 }

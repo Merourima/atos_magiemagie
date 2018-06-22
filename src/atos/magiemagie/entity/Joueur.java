@@ -186,7 +186,7 @@ public class Joueur implements Serializable {
 
     @Override
     public String toString() {
-        return "atos.magiemagie.entity.Joueur[ id=" + id + " ]";
+        return String.format("id=%d pseudo=%s", id, pseudo);
     }
     
 }

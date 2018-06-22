@@ -6,6 +6,8 @@
 package atos.magiemagie.dao;
 
 import atos.magiemagie.entity.Carte;
+import atos.magiemagie.entity.Joueur;
+import atos.magiemagie.entity.Partie;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
@@ -18,16 +20,6 @@ import javax.persistence.Query;
 public class CarteDAO {
     
     
-         public List<Carte> listerCartesJoueurs(long idJoueur){
-            EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
-//            Query query = em.createQuery(" SELECT j FROM Joueur j JOIN j.cartes c"
-//                   + "                    WHERE c.joueur_id=j.id ");
-             Query query = em.createQuery(" SELECT c FROM Carte c "
-                   + "                    WHERE c.joueur=:idjoueur ");
-             query.setParameter("idjoueur", idJoueur);
-            return   query.getResultList();
-    }
-    
     public void ajouterCarte(Carte carte) {
         
          EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
@@ -36,5 +28,19 @@ public class CarteDAO {
          em.flush();
          em.getTransaction().commit();     
     }
+
+    
+
+    public List<Carte> listerCartesJoueurs(long joueurID) {
+        EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
+//            Query query = em.createQuery(" SELECT j FROM Joueur j JOIN j.cartes c"
+//                   + "                    WHERE c.joueur_id=j.id ");
+             Query query = em.createQuery(" SELECT c FROM Carte c "
+                     + "                    JOIN c.joueur j "
+                   + "                      WHERE j.id=:idjoueur ");
+             query.setParameter("idjoueur", joueurID);
+            return   query.getResultList();
+    }
+
     
 }
