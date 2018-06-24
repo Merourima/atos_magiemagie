@@ -11,6 +11,7 @@ import atos.magiemagie.dao.PartieDAO;
 import atos.magiemagie.entity.Carte;
 import atos.magiemagie.entity.Carte.TypeIngredient;
 import atos.magiemagie.entity.Joueur;
+import static java.util.Collections.list;
 import java.util.List;
 import java.util.Random;
 
@@ -47,5 +48,61 @@ public class CarteService {
         daoCarte.ajouterCarte(c);
         return (Carte) c;
     }
+      public Carte prendreUneCarteDunJoueur(long idJoueur, long idVictime) {
+
+        //0. Récup joueur
+        Joueur jAct = daoJr.rechercheParId(idJoueur);
+        Joueur jVictime = daoJr.rechercheParId(idVictime);
+        
+        // 1. Prendre une carte d'un joueur
+        Random r = new Random();
+        int index = r.nextInt(jVictime.getCartes().size());
+        Carte carte = jVictime.getCartes().get(index);
+
+        // 2. Associe la carte au joueur et vice-versa
+        //jAct.getCartes().add(c);
+        carte.setJoueur(jAct);
+
+        // 3. Persiste la carte
+       // daoJr.modifier(j);
+        carte =  daoCarte.modifierCarte(carte);
+        
+        if (jVictime.getCartes().size() == 1){
+           jVictime = daoJr.rechercheParId(idVictime);
+           jVictime.setEtatjoueur(Joueur.EtatJoueur.PERDU);
+           daoJr.modifier(jVictime);
+        }
+        
+        return  carte;
+    }
+
+//    public Carte prendreLaMoitieDesCartesDunJoueur(long idJoueur, long idVictime) {
+//        //0. Récup joueur
+//        Joueur jAct = daoJr.rechercheParId(idJoueur);
+//        Joueur jVictime = daoJr.rechercheParId(idVictime);
+//        
+//        // 1. Générer nouvelle carte
+//        TypeIngredient[] tabCarteIng = TypeIngredient.values();
+//        Random r = new Random();
+//        int index = r.nextInt((tabCarteIng.length) % 2);
+//        Carte carte = jVictime.getCartes().get(index);
+//        carte.setTypeIngredient(tabCarteIng[index]);
+//        
+//        jAct.getCartes().add(carte);
+//        carte.setJoueur(jAct);
+//        
+//        // 3. Persiste la carte
+//       // daoJr.modifier(j);
+//        carte =  daoCarte.modifierCarte(carte);
+//        
+//        if (jVictime.getCartes().size() == 1){
+//           jVictime = daoJr.rechercheParId(idVictime);
+//           jVictime.setEtatjoueur(Joueur.EtatJoueur.PERDU);
+//           daoJr.modifier(jVictime);
+//        }
+//        
+//        return  carte;
+//        
+//    }
     
 }

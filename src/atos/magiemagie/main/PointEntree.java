@@ -33,10 +33,7 @@ public class PointEntree {
     private CarteService carteservice = new CarteService();
     private CarteDAO carteDaoJr = new CarteDAO();
     
-    public void lancerLeJeu(){
-            
     
-    }
     public void menuPrincipale(){
         
         Scanner scan = new Scanner(System.in);
@@ -102,6 +99,7 @@ public class PointEntree {
                    System.out.println(" La partie : " +idPartie+ " est bien démarrée");
                    //Récupere  id joueur qui a la main
                    System.out.println(" Le Joueur qui A LA MAIN est  : " +joueurDao.determineJoueurQuiALaMainDansPArtie(idPartie));
+                   
                     break;
 
                 case "5":

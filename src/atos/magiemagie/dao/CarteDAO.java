@@ -28,6 +28,15 @@ public class CarteDAO {
          em.flush();
          em.getTransaction().commit();     
     }
+    
+    public Carte modifierCarte(Carte carte) {
+         EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
+         em.getTransaction().begin();
+         em.merge(carte);
+         em.flush();
+         em.getTransaction().commit();   
+         return carte;
+    }
 
     
 
