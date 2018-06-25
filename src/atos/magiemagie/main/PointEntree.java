@@ -32,11 +32,11 @@ public class PointEntree {
     private JoueurDAO joueurDao = new JoueurDAO();
     private CarteService carteservice = new CarteService();
     private CarteDAO carteDaoJr = new CarteDAO();
-    
+    Scanner scan = new Scanner(System.in);
     
     public void menuPrincipale(){
         
-        Scanner scan = new Scanner(System.in);
+        
         String choix ;
      do{
         System.out.println("                                                           ");    
@@ -98,7 +98,13 @@ public class PointEntree {
                    }
                    System.out.println(" La partie : " +idPartie+ " est bien démarrée");
                    //Récupere  id joueur qui a la main
-                   System.out.println(" Le Joueur qui A LA MAIN est  : " +joueurDao.determineJoueurQuiALaMainDansPArtie(idPartie));
+                   Joueur idJrALaMain = joueurDao.determineJoueurQuiALaMainDansPArtie(idPartie);
+                   System.out.println(" Le Joueur qui A LA MAIN est  : " +idJrALaMain);
+                   
+                   //if(getEtatjoueur().A_LA_MAIN){
+                       ecranJeu(idPartie, idJrALaMain.getPseudo());
+                       
+                  // }
                    
                     break;
 
@@ -123,11 +129,48 @@ public class PointEntree {
             }
         } while (!choix.equals("Q"));
     }
-    private void ecranJeu(long idPartie, String pseudo){
-        //recup id de moi
+
+    public void ecranJeu(long idPartie, String pseudo){
+        Joueur joueurAct = joueurDao.rechercherParPseudo(pseudo);
+//        if(joueurAct = alamain)
+//    while (true)
+        System.out.println(" Si tu veux  *** Piocher une carte *** Tape [1]  ou Si tu veux *** Lancer un sort *** Tape [2]");
+        String choix = scan.nextLine();
+        switch (choix){
+            case "1":
+                //partieService.piocherUneCarte(joueurAct);
+                carteservice.distribuerCarte(joueurAct.getId());
+                System.out.println("  une carte est rajouter à la liste de tes cartes ");
+                break;
+                
+            case "2":
+//                 
+//                List<Carte> listeCarteJrAct = carteDaoJr.listerCartesJoueurs(joueurAct.getId());
+                System.out.println(" La liste de tes cartes est : ");
+                System.out.println("  " + carteDaoJr.listerCartesJoueurs(joueurAct.getId()) + " ");
+                System.out.println("");
+                System.out.println(" tu doit choisir un id de deux cartes de votre choix idcarte0 et idcarte1");
+                int idcarte0 = scan.nextInt();
+                int idcarte1 = scan.nextInt();
+
+                partieService.lancerSort(idcarte0, idcarte1, joueurAct.getId(), idPartie);
+                break;
+            
+            default:
+                    System.out.println(" ");
+                    System.out.println(" !!!!!!!! Choix inconnu !!!!!!");    
+                    
+                    
+//        }else
+//                    Thread.sleep(1000);
         
-        long monID = 1L;
-        while(true){
+        }
+
+
+//recup id de moi
+        
+//        long monID = 1L;
+//        while(true){
         //recherhce jr qui a la main
         //si == monID ===> a moi jouer
         
@@ -139,12 +182,13 @@ public class PointEntree {
 //        
 //default: 
 //systout"option inconnue";
-        }
-    
-    }
+//        }
+//    
+   }
     public static void main(String[] args) {
         PointEntree m = new PointEntree();
         m.menuPrincipale();
+        
     }
 
 }

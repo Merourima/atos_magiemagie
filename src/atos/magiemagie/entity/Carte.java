@@ -101,7 +101,7 @@ public class Carte implements Serializable {
     @Override
     public String toString() {
 //        return "atos.magiemagie.entity.Carte[ id=" + id + " ]";
-            return String.format("ID carte : %s, typeIngredient : %s",id, typeIngredient);
-    }
+            return String.format(" \n L'ID : %s de la carte : %s ", id , typeIngredient);
+                }
     
 }

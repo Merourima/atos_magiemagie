@@ -67,7 +67,7 @@ public class CarteService {
        // daoJr.modifier(j);
         carte =  daoCarte.modifierCarte(carte);
         
-        if (jVictime.getCartes().size() == 1){
+        if (jVictime.getCartes().size() == 0){                    //ou 1
            jVictime = daoJr.rechercheParId(idVictime);
            jVictime.setEtatjoueur(Joueur.EtatJoueur.PERDU);
            daoJr.modifier(jVictime);
@@ -76,33 +76,6 @@ public class CarteService {
         return  carte;
     }
 
-//    public Carte prendreLaMoitieDesCartesDunJoueur(long idJoueur, long idVictime) {
-//        //0. Récup joueur
-//        Joueur jAct = daoJr.rechercheParId(idJoueur);
-//        Joueur jVictime = daoJr.rechercheParId(idVictime);
-//        
-//        // 1. Générer nouvelle carte
-//        TypeIngredient[] tabCarteIng = TypeIngredient.values();
-//        Random r = new Random();
-//        int index = r.nextInt((tabCarteIng.length) % 2);
-//        Carte carte = jVictime.getCartes().get(index);
-//        carte.setTypeIngredient(tabCarteIng[index]);
-//        
-//        jAct.getCartes().add(carte);
-//        carte.setJoueur(jAct);
-//        
-//        // 3. Persiste la carte
-//       // daoJr.modifier(j);
-//        carte =  daoCarte.modifierCarte(carte);
-//        
-//        if (jVictime.getCartes().size() == 1){
-//           jVictime = daoJr.rechercheParId(idVictime);
-//           jVictime.setEtatjoueur(Joueur.EtatJoueur.PERDU);
-//           daoJr.modifier(jVictime);
-//        }
-//        
-//        return  carte;
-//        
-//    }
+//    
     
 }

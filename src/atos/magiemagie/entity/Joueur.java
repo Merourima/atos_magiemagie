@@ -186,7 +186,8 @@ public class Joueur implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("id=%d pseudo=%s", id, pseudo);
+        return String.format(" \n L'id = %d du joueur = %s \n", id, pseudo);
+        
     }
     
 }
