@@ -77,8 +77,10 @@ public class PointEntree {
                     String avatar = scan.nextLine();
                     Long idPartie = Long.parseLong(scan.nextLine());
                     Joueur joueurActif = joueurService.rejoindrePartie(pseudo, idPartie, avatar); /// check it!!!!!!!!
+                    partieService.demarrerPartie(idPartie);
+                    joueurService.infoJoueurDeLaPArtie(idPartie);
                     ecranJeu(idPartie, joueurActif.getId());
-
+                    
 //recup idJoueurActuell enregistrer;
                     // Recherche partie par son id
 //                    Partie p = partieDao.rechercherParID(idPartie);
@@ -103,7 +105,7 @@ public class PointEntree {
 
                 case "5":
                     List<Partie> listePartieDemarrer = partieService.listerPartieDemarrees();
-                    System.out.println(" La liste des Parties non démarrées  " + listePartieDemarrer);
+                    System.out.println(" La liste des Parties démarrées  " + listePartieDemarrer);
                     for (Partie partie : listePartieDemarrer) {
                         for (Joueur joueur : partie.getJoueurs()) {
                             System.out.println("Joueur info : " + joueur.getPseudo());
@@ -126,8 +128,8 @@ public class PointEntree {
     public void ecranJeu(long idPartie, long joueurActuel) throws InterruptedException {
         String choix;
         do {// BOUCLE DE JEU
-
             // Détermine qui a la main
+            
             Joueur joueurAct = joueurService.determineJoueurQuiALaMainDansPArtie(idPartie);
             if (joueurAct != null) {//jr a la main
                 System.out.println(" Si tu veux  *** Piocher une carte *** Tape [1]  ou Si tu veux *** Lancer un sort *** Tape [2]");

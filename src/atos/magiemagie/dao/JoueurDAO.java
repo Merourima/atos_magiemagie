@@ -21,12 +21,10 @@ public class JoueurDAO {
     public Joueur determineJoueurQuiALaMainDansPArtie(long idPartie){
              EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
               Query query = em.createQuery("select j from Joueur j join j.partie p where j.etatjoueur=:etat_ALaMain and p.id=:id_Partie");
+//              select * from Joueur join PARTIE on JOUEUR.PARTIE_ID = PARTIE.ID where etatjoueur = 'A_LA_MAIN' ; 
               query.setParameter("etat_ALaMain", Joueur.EtatJoueur.A_LA_MAIN);
               query.setParameter("id_Partie", idPartie);
               return (Joueur) query.getSingleResult();
-//               Object res = query.getSingleResult();
-//       
-//              return (Joueur) res;
     }
     
     
