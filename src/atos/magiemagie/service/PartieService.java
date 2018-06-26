@@ -165,7 +165,7 @@ public class PartieService {
             
 //        determine si les autres joueurs ont perdu
 //          et Passe le joueur à l'état GAGNé
-        if(!partiedao.determineSiPlusQueUnJoueurDansPartie(idpartie)){
+        if(partiedao.determineSiPlusQueUnJoueurDansPartie(idpartie)){
                  joueurQuiAlaMain.setEtatjoueur(Joueur.EtatJoueur.GAGNEE);
                  joueurDao.modifier(joueurQuiAlaMain);
                  return;
