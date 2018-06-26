@@ -21,7 +21,7 @@ import java.util.Scanner;
 public class PartieService {
 
     private PartieDAO partiedao = new PartieDAO();
-    private JoueurService dao1 = new JoueurService();
+    private JoueurService joueurService = new JoueurService();
     private JoueurDAO joueurDao = new JoueurDAO();
     private CarteDAO carteDao = new CarteDAO();
     private CarteService carteservice = new CarteService();
@@ -38,7 +38,13 @@ public class PartieService {
         }
         System.out.println("  ");
         System.out.println(" choisi un joueur que tu veux récuperer cartes : ");
-        Long idJrVict = Long.parseLong(scan.nextLine());
+        Long idJrVict = null;
+        try {
+             idJrVict = Long.parseLong(scan.nextLine());
+        }catch (Exception e) {
+           return choisirUnJoueur(joueurAct);
+        }
+        
         return idJrVict;
     }
     public long choisirUneDeMesCartes(Joueur joueurAct) {
@@ -152,7 +158,7 @@ public class PartieService {
     
     // *****************          Déterminer Le Joueur Suivant      *******************************
     
-    public void passeJoueurSuivant(long idpartie, long idJrPartie){
+    public void passeJoueurSuivant(long idpartie){
     
 //        recuperer un joueur qui A_LA_MAIN
         Joueur joueurQuiAlaMain = joueurDao.determineJoueurQuiALaMainDansPArtie(idpartie);
@@ -174,9 +180,9 @@ public class PartieService {
          while(true){
              //si joueurEvalue est le dernier joueur alors on évalue le joueur d'ordre 1
              if(joueurEvalue.getOrdre() >= ordreMax){
-                 joueurEvalue = joueurDao.rechercheJoueurParPartieidEtORdre(idJrPartie, 1L);
+                 joueurEvalue = joueurDao.rechercheJoueurParPartieidEtORdre(idpartie, 1L);
              }  else {   //             recupere le joueur d'ordre suivant  (ordre+1)
-                     joueurEvalue = joueurDao.rechercheJoueurParPartieidEtORdre(idJrPartie, joueurEvalue.getOrdre()+1);
+                     joueurEvalue = joueurDao.rechercheJoueurParPartieidEtORdre(idpartie, joueurEvalue.getOrdre()+1);
                 }
              
              //Return si tout les joueurs non éliminés était en sommeil profond (et qu'on la a juste réveillés)
@@ -229,8 +235,8 @@ public class PartieService {
 
         //Erreur  si pas au moins 2 joueurs dans la partie
         if (p.getJoueurs().size() < 2) {
-            throw new RuntimeException("Nombre des joueurs doit étre supérieur à 2");
-
+            System.out.println("Nombre des joueurs doit étre supérieur à 2");
+            return ;
         }
 
         //Passe le joueur d'ordre 1 à l'état A_LA_MAIN
@@ -250,6 +256,81 @@ public class PartieService {
         return partiedao.listerPartieDemarrees();
         
     }
+    
+     public void showEcranJeuPourChaqueJr(long idPartie, long idJoueurConsole) throws InterruptedException {
+        Partie parte = partiedao.rechercherParID(idPartie);
+        System.out.println("****************************** Debut Ecran *************************");
+        Joueur moi = joueurDao.rechercheParId(idJoueurConsole);
+         for (Joueur joueur : parte.getJoueurs()) {
+             if(joueur.getId() != idJoueurConsole){
+                  System.out.println("idJoueur = "+joueur.getId()+" nom =" + joueur.getPseudo() 
+                          +" Etat =" + joueur.getEtatjoueur() +" nbr Carte =" + joueur.getEtatjoueur() );
+             }
+            }
+         System.out.println("********Mes cartes********");
+         System.out.println("moi :  idJoueur = "+moi.getId()+" nom =" + moi.getPseudo() 
+                          +" Etat  =" + moi.getEtatjoueur() + " nbr Carte =" + moi.getEtatjoueur());
+         int index = 1;
+         for (Carte carte : moi.getCartes()) {
+             System.out.println("carte " + index + " :  idCarte =" + carte.getId() + " nom Carte =" + carte.getTypeIngredient());
+         }
+        
+         System.out.println("****************************** Fin Ecran *************************");
+     }
+     
+     public void ecranJeu(long idPartie, long joueurConsole) throws InterruptedException {
+        long moi = joueurConsole;
+        String choix;
+        boolean siPartieDemarre = false;
+        do {// BOUCLE DE JEU
+            // Détermine qui a la main
+            Joueur joueurALaMain = joueurService.determineJoueurQuiALaMainDansPArtie(idPartie);
+            if (joueurALaMain != null){// la parte est bien demarrer car il y a un joueur qui a main 
+             siPartieDemarre = true;
+                        if( moi == joueurALaMain.getId() ) {//la partie demarre et jr de cosole a la main
+                             showEcranJeuPourChaqueJr(idPartie, moi);
+                            System.out.println(" Si tu veux  *** Piocher une carte *** Tape [1]  ou Si tu veux *** Lancer un sort *** Tape [2]");
+                            choix = scan.nextLine();
+                            do {
+                                switch (choix) {
+                                    case "1":
+                                        //*********         piocherUneCarte    *********
+                                        carteservice.distribuerCarte(joueurALaMain.getId());
+                                        System.out.println("  \n une carte est rajouter à la liste de tes cartes \n");
+                                        break;
+
+                                    case "2":
+                                        //*********         LancerUnSort   *********
+                                        System.out.println(" La liste de tes cartes est : ");
+                                        System.out.println("  " + carteDao.listerCartesJoueurs(joueurALaMain.getId()) + " ");
+                                        System.out.println("");
+                                        System.out.println(" tu doit choisir un id de deux cartes de votre choix idcarte0 et idcarte1");
+                                        int idcarte0 = scan.nextInt();
+                                        int idcarte1 = scan.nextInt();
+
+                                        lancerSort(idcarte0, idcarte1, joueurALaMain.getId(), idPartie);
+                                        break;
+
+                                    default:
+                                        System.out.println("  !!!!!!!! Choix inconnu !!!!!! \n");
+                                        break;
+                                }
+                            } while (!(choix.equals("1") || choix.equals("2")));
+                            passeJoueurSuivant(idPartie);
+                         }else {//si la partie est demarre et le joueur de console n pas la main 
+                            showEcranJeuPourChaqueJr(idPartie, moi);
+                        }
+            }else {//auqun joueur a lamain 
+                if(siPartieDemarre == false){
+                     System.out.println("la partie n'est pas encore demarré");
+                }else {
+                    System.out.println("la partie est bien terminé");
+                }
+            }
+           Thread.sleep(5000);
+        } while (true);
+    }
+
     
     
  

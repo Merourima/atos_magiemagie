@@ -72,14 +72,16 @@ public class PointEntree {
                     break;
 
                 case "3":
-                    System.out.println(" Entrez un Pseudo et un Avatar et le ID de La partie   *____* ");
+                    System.out.println(" Entrez un Pseudo    *____* ");
                     String pseudo = scan.nextLine();
+                     System.out.println(" Entrez   un Avatar   *____* ");
                     String avatar = scan.nextLine();
+                     System.out.println("  ID de La partie   *____* ");
                     Long idPartie = Long.parseLong(scan.nextLine());
                     Joueur joueurActif = joueurService.rejoindrePartie(pseudo, idPartie, avatar); /// check it!!!!!!!!
                     partieService.demarrerPartie(idPartie);
-                    joueurService.infoJoueurDeLaPArtie(idPartie);
-                    ecranJeu(idPartie, joueurActif.getId());
+                    partieService.ecranJeu(idPartie, joueurActif.getId());
+                   
                     
 //recup idJoueurActuell enregistrer;
                     // Recherche partie par son id
@@ -125,47 +127,9 @@ public class PointEntree {
         } while (!choix.equals("Q"));
     }
 
-    public void ecranJeu(long idPartie, long joueurActuel) throws InterruptedException {
-        String choix;
-        do {// BOUCLE DE JEU
-            // Détermine qui a la main
-            
-            Joueur joueurAct = joueurService.determineJoueurQuiALaMainDansPArtie(idPartie);
-            if (joueurAct != null) {//jr a la main
-                System.out.println(" Si tu veux  *** Piocher une carte *** Tape [1]  ou Si tu veux *** Lancer un sort *** Tape [2]");
-                choix = scan.nextLine();
-                do {
-                    switch (choix) {
-                        case "1":
-                            //*********         piocherUneCarte    *********
-                            carteservice.distribuerCarte(joueurAct.getId());
-                            System.out.println("  \n une carte est rajouter à la liste de tes cartes \n");
-                            break;
-
-                        case "2":
-                            //*********         LancerUnSort   *********
-                            System.out.println(" La liste de tes cartes est : ");
-                            System.out.println("  " + carteDaoJr.listerCartesJoueurs(joueurAct.getId()) + " ");
-                            System.out.println("");
-                            System.out.println(" tu doit choisir un id de deux cartes de votre choix idcarte0 et idcarte1");
-                            int idcarte0 = scan.nextInt();
-                            int idcarte1 = scan.nextInt();
-
-                            partieService.lancerSort(idcarte0, idcarte1, joueurAct.getId(), idPartie);
-                            break;
-
-                        default:
-                            System.out.println("  !!!!!!!! Choix inconnu !!!!!! \n");
-                            break;
-                    }
-                } while (!(choix.equals("1") || choix.equals("2")));
-                partieService.passeJoueurSuivant(idPartie, joueurAct.getId());
-            } else {//na pas la main
-                System.out.println("pas ton tour");
-                Thread.sleep(1000);
-            }
-        } while (true);
-    }
+    
+    
+   
 
     public static void main(String[] args) throws InterruptedException {
         PointEntree m = new PointEntree();

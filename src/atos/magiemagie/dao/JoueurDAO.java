@@ -19,12 +19,17 @@ public class JoueurDAO {
 
     
     public Joueur determineJoueurQuiALaMainDansPArtie(long idPartie){
-             EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
-              Query query = em.createQuery("select j from Joueur j join j.partie p where j.etatjoueur=:etat_ALaMain and p.id=:id_Partie");
+            EntityManager em = Persistence.createEntityManagerFactory("AtelierMagieMagiePU").createEntityManager();
+        Query query = em.createQuery("select j from Joueur j join j.partie p where j.etatjoueur=:etat_ALaMain and p.id=:id_Partie");
 //              select * from Joueur join PARTIE on JOUEUR.PARTIE_ID = PARTIE.ID where etatjoueur = 'A_LA_MAIN' ; 
-              query.setParameter("etat_ALaMain", Joueur.EtatJoueur.A_LA_MAIN);
-              query.setParameter("id_Partie", idPartie);
-              return (Joueur) query.getSingleResult();
+        query.setParameter("etat_ALaMain", Joueur.EtatJoueur.A_LA_MAIN);
+        query.setParameter("id_Partie", idPartie);
+         List<Joueur> joueurTrouves = query.getResultList();
+
+        if (joueurTrouves.size() == 0) {
+            return null;
+        }
+        return (joueurTrouves.get(0));
     }
     
     
@@ -49,7 +54,12 @@ public class JoueurDAO {
 
         Query query = em.createQuery("select j from Joueur j join j.partie p where j.ordre = 1 and p.id =:idpartie ");
         query.setParameter("idpartie", idPartie);
-        return  (Joueur) query.getSingleResult();
+         List<Joueur> joueurTrouves = query.getResultList();
+
+        if (joueurTrouves.size() == 0) {
+            return null;
+        }
+        return (joueurTrouves.get(0));
     }
     /**
      * Renvoi le joueur existe par pseudo
@@ -97,7 +107,11 @@ public class JoueurDAO {
            Query query = em.createQuery("select j from Joueur j join j.partie p where p.id=:partieID and j.ordre=:ordre");
            query.setParameter("partieID", idParatie);
            query.setParameter("ordre", ordre);
-           return (Joueur) query.getSingleResult();
+           Object res = query.getSingleResult();
+        if (res == null) {
+            return null;
+        }
+        return (Joueur) res;
 
 
     }

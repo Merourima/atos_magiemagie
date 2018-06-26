@@ -23,19 +23,19 @@ public class JoueurService {
     private PartieDAO partiedao = new PartieDAO();
     private CarteDAO caretdao = new CarteDAO();
     
-    public void infoJoueurDeLaPArtie(long idpartie){
-           Partie p = partiedao.rechercherParID(idpartie);
-           List<Joueur> joueurDeLaPartie = p.getJoueurs();
-           
-           for (Joueur joueur : joueurDeLaPartie) {
-                if(!joueur.getEtatjoueur().equals("A_LA_MAIN")){
-                    System.out.println(" joueur : " +joueur.toString()+ "!!!!!!!!!!! NBR  DE CARTES!!!!!!!!!!!");
-                }
-                if(joueur.getEtatjoueur().equals("A_LA_MAIN")){
-                    System.out.println(" Liste Cartes est:  " +caretdao.listerCartesJoueurs(idpartie) );
-                }
-        }
-    }
+//    public void infoJoueurDeLaPArtie(long idpartie){
+//           Partie p = partiedao.rechercherParID(idpartie);
+//           List<Joueur> joueurDeLaPartie = p.getJoueurs();
+//           
+//           for (Joueur joueur : joueurDeLaPartie) {
+//                if(!joueur.getEtatjoueur().equals("A_LA_MAIN")){
+//                    System.out.println(" joueur : " +joueur.toString()+ "!!!!!!!!!!! NBR  DE CARTES!!!!!!!!!!!");
+//                }
+//                if(joueur.getEtatjoueur().equals("A_LA_MAIN")){
+//                    System.out.println(" Liste Cartes est:  " +caretdao.listerCartesJoueurs(idpartie) );
+//                }
+//        }
+//    }
     public Joueur determineJoueurQuiALaMainDansPArtie(long idPartie){
         return joueurDao.determineJoueurQuiALaMainDansPArtie(idPartie);
     }
