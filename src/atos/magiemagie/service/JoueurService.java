@@ -33,6 +33,11 @@ public class JoueurService {
 //    
 //    }
 //    
+    
+    public Joueur determineJoueurQuiALaMainDansPArtie(long idPartie){
+        return joueurDao.determineJoueurQuiALaMainDansPArtie(idPartie);
+    }
+    
     public Joueur rejoindrePartie( String pseudo,long idPartie,String avatar){
     
       //recherche si le joueur existe déjà

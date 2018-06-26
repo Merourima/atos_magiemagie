@@ -149,18 +149,17 @@ public class PartieService {
             }
         }
     }
-    // *****************          Piocher une Carte                 *******************************
     
     // *****************          Déterminer Le Joueur Suivant      *******************************
     
-    public void passeJoueurSuivant(long idpartie, long idPartie){
+    public void passeJoueurSuivant(long idpartie, long idJrPartie){
     
 //        recuperer un joueur qui A_LA_MAIN
         Joueur joueurQuiAlaMain = joueurDao.determineJoueurQuiALaMainDansPArtie(idpartie);
             
 //        determine si les autres joueurs ont perdu
 //          et Passe le joueur à l'état GAGNé
-        if(partiedao.determineSiPlusQueUnJoueurDansPartie(idpartie)){
+        if(!partiedao.determineSiPlusQueUnJoueurDansPartie(idpartie)){
                  joueurQuiAlaMain.setEtatjoueur(Joueur.EtatJoueur.GAGNEE);
                  joueurDao.modifier(joueurQuiAlaMain);
                  return;
@@ -175,9 +174,9 @@ public class PartieService {
          while(true){
              //si joueurEvalue est le dernier joueur alors on évalue le joueur d'ordre 1
              if(joueurEvalue.getOrdre() >= ordreMax){
-                 joueurEvalue = joueurDao.rechercheJoueurParPartieidEtORdre(idPartie, 1L);
+                 joueurEvalue = joueurDao.rechercheJoueurParPartieidEtORdre(idJrPartie, 1L);
              }  else {   //             recupere le joueur d'ordre suivant  (ordre+1)
-                     joueurEvalue = joueurDao.rechercheJoueurParPartieidEtORdre(idPartie, joueurEvalue.getOrdre()+1);
+                     joueurEvalue = joueurDao.rechercheJoueurParPartieidEtORdre(idJrPartie, joueurEvalue.getOrdre()+1);
                 }
              
              //Return si tout les joueurs non éliminés était en sommeil profond (et qu'on la a juste réveillés)
