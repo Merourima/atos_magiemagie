@@ -93,7 +93,7 @@ public class PartieService {
 //         si l'adversaire à une seule carte!!!!!!! ===>  Piocher 2 cartes !!!!!! + la carte de l'advers
         int nbrCartes = joueurAdvers.getCartes().size() > 3 ? 3 :joueurAdvers.getCartes().size();
         for (int i = 0; i < nbrCartes; i++) {
-            carteservice.prendreUneCarteDunJoueur(idJoueurAdvers, idcarteJrAct);
+            carteservice.prendreUneCarteDunJoueur(idcarteJrAct,idJoueurAdvers);
         }
 
         joueurAdvers.getCartes().add(carteJrActChoisi);
@@ -264,15 +264,16 @@ public class PartieService {
          for (Joueur joueur : parte.getJoueurs()) {
              if(joueur.getId() != idJoueurConsole){
                   System.out.println("idJoueur = "+joueur.getId()+" nom =" + joueur.getPseudo() 
-                          +" Etat =" + joueur.getEtatjoueur() +" nbr Carte =" + joueur.getEtatjoueur() );
+                          +" Etat =" + joueur.getEtatjoueur() +" nbr Carte =" + moi.getCartes().size() );
              }
             }
          System.out.println("********Mes cartes********");
          System.out.println("moi :  idJoueur = "+moi.getId()+" nom =" + moi.getPseudo() 
-                          +" Etat  =" + moi.getEtatjoueur() + " nbr Carte =" + moi.getEtatjoueur());
+                          +" Etat  =" + moi.getEtatjoueur() + " nbr Carte =" + moi.getCartes().size());
          int index = 1;
          for (Carte carte : moi.getCartes()) {
              System.out.println("carte " + index + " :  idCarte =" + carte.getId() + " nom Carte =" + carte.getTypeIngredient());
+             index++;
          }
         
          System.out.println("****************************** Fin Ecran *************************");
@@ -289,9 +290,9 @@ public class PartieService {
              siPartieDemarre = true;
                         if( moi == joueurALaMain.getId() ) {//la partie demarre et jr de cosole a la main
                              showEcranJeuPourChaqueJr(idPartie, moi);
-                            System.out.println(" Si tu veux  *** Piocher une carte *** Tape [1]  ou Si tu veux *** Lancer un sort *** Tape [2]");
-                            choix = scan.nextLine();
                             do {
+                                System.out.println(" Si tu veux  *** Piocher une carte *** Tape [1]  ou Si tu veux *** Lancer un sort *** Tape [2]");
+                                choix = scan.nextLine();
                                 switch (choix) {
                                     case "1":
                                         //*********         piocherUneCarte    *********
